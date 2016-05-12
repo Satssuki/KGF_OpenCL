@@ -1,9 +1,20 @@
 #ifndef KGF_OPENCL_EASY_H
 #define KGF_OPENCL_EASY_H
 
+	/*
+		Author: Marios Katsigiannis.
+		This library uses KGF_API_openCL and simplifies them, by using arrays with data
+		to initialize KGF_API_openCL and execute a given kernel
+	*/
+
 	#include <time.h>
 	#include "KGF_API_OpenCL.h"
 
+	/*
+		defines clock_gettime and the required defines in order to provide something similar
+		to the Linux clock_gettime, although the CLOCK_REALTIME and CLOCK_PROCESS_CPUTIME_ID
+		are not the same as in Linux
+	*/
 	#if defined(WIN32) && !defined(clock_gettime)
 	#define clock_gettime(base, ts) timespec_get(ts, base);
 	#define CLOCK_PROCESS_CPUTIME_ID TIME_UTC
@@ -11,12 +22,14 @@
 	#endif
 
 
+	// OCL_easy contains all the data needed by KGF_API_openCL to function
 	struct OCL_easy {
 		OCL_API_platforms platforms;
 		OCL_API_devices devices;
 		OCL_API_context context;
 		struct timespec start, stop;
 	};
+
 	//initizes the OCL_easy structure and calls all the required OCL_* functions to get a working context
 	//it also initializes the required buffers. void** buffers, size_t* buffer_sizes, OCL_API_buffer_flags*
 	//buffer_flags must fave the same first dimension equals to buffers_count.

@@ -54,6 +54,7 @@ bool OCL_easy_init(OCL_easy* ocl, OCL_API_device_type type, size_t buffers_count
 		}
 	}
 	OCL_API_kernel* kernel;
+	//initialize, load and create all available kernels
 	for (size_t i = 0; i < ocl->context.kernels_size; i++) {
 		kernel = OCL_API_context_get_kernel(&ocl->context, i);
 		OCL_API_kernel_init(kernel, &ocl->context, kernel_names[i], 1, args_count[i], num_dimensions);

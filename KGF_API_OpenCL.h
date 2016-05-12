@@ -18,20 +18,34 @@ program with one kernel per OCL_API_kernel object.
 			#include <stdint.h>
 			#include <CL/cl.h>
 
+
+			/*
+				OCL contains the ids of the events, KGF framework must handle. Do not use 
+			*/
 			enum OCL {
 				KGF_IC_OCL_get_platforms, //get all available platforms
 				KGF_IC_OCL_get_devices, //get all available devices
 				KGF_IC_OCL_get_context, //creates the context and a command queue
 				KGF_IC_OCL_create_buffer, // creates an OpenCL buffer
+				//TODO: Add the rest
 			};
+			/*
+				OCL_API_device_type contains the types of devices that will be queried by OpenCL.
+				At the moment only dt_cpu and dt_gpu are tested, there should be no problem with
+				the rest though
+			*/
 			enum OCL_API_device_type {
 				dt_default = CL_DEVICE_TYPE_DEFAULT,
-				dt_cpu = CL_DEVICE_TYPE_CPU,
-				dt_gpu = CL_DEVICE_TYPE_GPU,
-				//dt_accelarator = CL_DEVICE_TYPE_ACCELERATOR,
-				//dt_custom = CL_DEVICE_TYPE_CUSTOM,
-				dt_all = CL_DEVICE_TYPE_ALL,
+				dt_cpu = CL_DEVICE_TYPE_CPU,		// query only CPU devices
+				dt_gpu = CL_DEVICE_TYPE_GPU,		// query only CPU devices
+				//dt_accelarator = CL_DEVICE_TYPE_ACCELERATOR,	// query only FPGA devices
+				//dt_custom = CL_DEVICE_TYPE_CUSTOM,			//query only custom devices
+				dt_all = CL_DEVICE_TYPE_ALL,		// query all devices
 			};
+			/*
+				OCL_API_buffer_flags contain flags used for manipulating buffer permissions
+				and storage
+			*/
 			enum OCL_API_buffer_flags {
 				bf_read_write = CL_MEM_READ_WRITE, // the buffer will be retrieved after kernel execution
 				bf_write_only = CL_MEM_WRITE_ONLY, // the buffer will be retrieved after kernel execution
@@ -44,14 +58,21 @@ program with one kernel per OCL_API_kernel object.
 				//bf_copy_host = CL_MEM_COPY_HOST_PTR,
 			};
 
+			/*
+				forward declarations, for prerequisites of OCL_API_platforms
+			*/
 			struct OCL_API_buffer;
 			struct OCL_API_kernel;
 
+			/*
+				contains platforms information. All available platforms will be provided in the
+				array *platforms. Each platform can be queried for its devices
+			*/
 			struct OCL_API_platforms {
 				cl_platform_id *platforms;
 				cl_uint platforms_size; //platforms capacity
 				cl_uint num_platforms; //platforms returns, set by the system
-				cl_int errcode_ret;
+				cl_int errcode_ret; // check for error codes
 			};
 			// zeros out the parameter
 			void OCL_API_platforms_init(OCL_API_platforms* platforms); // nulls out everything
@@ -60,6 +81,9 @@ program with one kernel per OCL_API_kernel object.
 			void OCL_API_platforms_clear(OCL_API_platforms* platforms); // deallocates the pointers in the structure
 
 
+			/*
+				contains device id for all devices of the platform selected.
+			*/
 			struct OCL_API_devices {
 				OCL_API_platforms* platforms;
 				cl_uint selected_platform;

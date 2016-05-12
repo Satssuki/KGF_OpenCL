@@ -210,3 +210,11 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/sum_totient_ported.cpp
+/sum_totient_ported.h
+/sum_totient_ported_fast.cpp
+/totient.cl
+/totient_smaller.cl
+/relprime.cl
+*.opendb
+/KGF_OpenCL/
